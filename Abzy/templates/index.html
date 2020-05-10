@@ -53,7 +53,7 @@
       </nav>
 
       <div id="world_map_div" class="container-fluid col-md-6 border border-dark">
-        <svg id="world_map" width="500" height="200"></svg>
+        <svg id="world_map" width="500" height="300"></svg>
       </div>
       <div id="parallel_coordinates" class="col-md-6 border-dark"></div>
       <!-- <div id="pie_chart"></div>
@@ -89,17 +89,28 @@
     // Data and color scale
     var data = d3.map();
     var colorScale = d3.scaleThreshold()
-      .domain([100000, 1000000, 10000000, 30000000, 100000000, 500000000])
+      .domain([0.2, 0.4, 0.5, 0.6, 0.7, 0.9])
       .range(d3.schemeBlues[7]);
 
     // Load external data and boot
     d3.queue()
       .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
-      .defer(d3.csv, "", function(d) { data.set(d.Code, +d.HDI); })
+      .defer(d3.csv, "https://raw.githubusercontent.com/adityagaikwad/Viz-Final-Project/master/Abzy/data/HDI_2017.csv?token=AFQMUXC55YRY3KIWGXBMQJ26W6UXI", function(d) { data.set(d.Code, +d.HDI); })
       .await(ready);
 
-    function ready(error, topo) {
+    function removeA(arr) {
+        var what, a = arguments, L = a.length, ax;
+        while (L > 1 && arr.length) {
+            what = a[--L];
+            while ((ax= arr.indexOf(what)) !== -1) {
+                arr.splice(ax, 1);
+            }
+        }
+        return arr;
+    }
 
+    var clicked_countries = [];
+    function ready(error, topo) {
       let mouseOver = function(d) {
         d3.selectAll(".Country")
           .transition()
@@ -113,14 +124,26 @@
       }
 
       let mouseLeave = function(d) {
-        d3.selectAll(".Country")
-          .transition()
-          .duration(200)
-          .style("opacity", .8)
-        d3.select(this)
-          .transition()
-          .duration(200)
-          .style("stroke", "transparent")
+        if(!clicked_countries.includes(d.id)) {
+          d3.selectAll(".Country")
+            .transition()
+            .duration(200)
+            .style("opacity", .8)
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("stroke", "transparent")
+        }
+      }
+
+      let mouseClick = function(d) {
+        if(clicked_countries.includes(d.id)) {
+          removeA(clicked_countries, d.id);
+        }
+        else {
+          clicked_countries.push(d.id);
+        }
+        console.log(clicked_countries);
       }
 
       // Draw the map
@@ -143,6 +166,7 @@
           .style("opacity", .8)
           .on("mouseover", mouseOver )
           .on("mouseleave", mouseLeave )
+          .on("click", mouseClick )
         }
     
 
