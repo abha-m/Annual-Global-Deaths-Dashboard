@@ -5,18 +5,17 @@ import numpy as np
 import json
 import pandas as pd
 
-app = Flask(__name__)
+df = pd.read_csv("data/HDI_2017.csv")
+returned_data = {}
 
-# Global variables initialization
-# data_df = pd.read_csv("data/encoded_data.csv")
-# print("Whole dataset loaded into RAM")
+app = Flask(__name__)
 
 @app.route('/', methods = ["GET"])
 def index():
-    return render_template("index.html")
-
-# @app.route('/api/generate_data', methods = ["POST"])
-# def generate_data():
-
+    hdi_2017 = df.to_dict(orient='records')
+    hdi_2017 = json.dumps(hdi_2017, indent=2)
+    returned_data["hdi_2017"] = hdi_2017
+    return render_template("index.html", returned_data = returned_data)
+    
 if __name__ == '__main__':
     app.run(debug=True)
