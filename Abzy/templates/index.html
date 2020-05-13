@@ -95,7 +95,7 @@
     // Load external data and boot
     d3.queue()
       .defer(d3.json, "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
-      .defer(d3.csv, "https://raw.githubusercontent.com/adityagaikwad/Viz-Final-Project/master/Abzy/data/HDI_2017.csv?token=AFQMUXC55YRY3KIWGXBMQJ26W6UXI", function(d) { data.set(d.Code, +d.HDI); })
+      .defer(d3.csv, "/static/data/HDI_2017.csv", function(d) { data.set(d.Code, +d.HDI); })
       .await(ready);
 
     function removeA(arr) {
@@ -139,9 +139,18 @@
       let mouseClick = function(d) {
         if(clicked_countries.includes(d.id)) {
           removeA(clicked_countries, d.id);
+          d3.select(this)
+            .transition()
+            .duration(200)
+            .style("stroke", "transparent")
         }
         else {
           clicked_countries.push(d.id);
+          d3.select(this)
+          .transition()
+          .duration(200)
+          .style("opacity", 1)
+          .style("stroke", "black")
         }
         console.log(clicked_countries);
       }
