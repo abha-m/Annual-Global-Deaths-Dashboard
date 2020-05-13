@@ -8,7 +8,7 @@ import pandas as pd
 app = Flask(__name__)
 
 # Global variables initialization
-# data_df = pd.read_csv("data/encoded_data.csv")
+# data_df = pd.read_csv("static/data/encoded_data.csv")
 # print("Whole dataset loaded into RAM")
 
 @app.route('/', methods = ["GET"])
