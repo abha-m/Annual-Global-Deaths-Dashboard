@@ -15,6 +15,11 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
+
+@app.route('/test', methods = ["GET"])
+def test():
+    return render_template("test.html")
+
 # @app.route('/api/generate_data', methods = ["POST"])
 # def generate_data():
 
