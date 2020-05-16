@@ -9,20 +9,45 @@
         <!-- <link href="{{ url_for('static',filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"> -->
 
         <style>
-            html, body { height: 100%; padding: 0; margin: 0; min-height:100%;}
-        
-           /* .quarter {
-                width:50%;
-                height:100%;
-                float:left;
+            svg {
+				font: 10px sans-serif;
+			}
+
+			.background path {
+				fill: none;
+				stroke: #ddd;
+				shape-rendering: crispEdges;
+			}
+
+			.foreground path {
+				fill: none;
+				stroke: steelblue;
+			}
+
+			.brush .extent {
+				fill-opacity: .3;
+				stroke: #fff;
+				shape-rendering: crispEdges;
+			}
+
+			.axis line,
+			.axis path {
+				fill: none;
+				stroke: #000;
+				shape-rendering: crispEdges;
+			}
+
+			.axis text {
+				text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+				cursor: move;
+			}
+
+			.axis .axis-label {
+				font-size: 11px;
+				font-weight: bold;
+				text-transform: uppercase;
             }
-
-            .quarter2 {
-                width:33%;
-                height:100%;
-                float:left;
-            } */
-
+            
         </style>
 
     </head>
@@ -66,7 +91,7 @@
                 </div>
                 <div class="col-md-5" id = "r1c2">
                 <!-- <div class="col-lg" id = "r1c2"> -->
-                    2
+                    <!-- <svg id="parallel" width="" height=""></svg> -->
                 </div>
             </div>
 
@@ -97,8 +122,14 @@
         <script src="{{ url_for('static',filename='js/custom-js/map.js') }}"></script>
 
         <!-- Parallel Coordinates Script -->
-        <script src="{{ url_for('static',filename='js/custom-js/parallel.js') }}"></script>
+        <!-- <script src="{{ url_for('static',filename='js/custom-js/parallel.js') }}"></script> -->
+        
+        <!-- Control data flow from here -->
+        <script>
+            country_list = ["Afghanistan", "Albania", "Algeria", "American Samoa"];
 
+            disease_list = ["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)", "Dementia (%)"];
+        </script>
     </body>
 
 </html>
