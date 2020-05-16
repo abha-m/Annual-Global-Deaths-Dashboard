@@ -119,8 +119,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-4" id = "r2c1">
-                    3
+                <div class="col-md-4 border border-dark" id = "scatterplot">
                 </div>
                     
                 <div class="col-md-4" id = "r2c2">
@@ -149,6 +148,24 @@
 
         <!-- Parallel Coordinates Script -->
         <script src="{{ url_for('static',filename='js/custom-js/parallel.js') }}"></script>
+
+        <!-- Scatterplot Script -->
+        <!-- <script src="{{ url_for('static',filename='js/custom-js/scatterplot.js') }}"></script> -->
+
+        <script>
+            // all_data = {{ returned_data.all_data | safe }}
+            // var unique_years = new Set([]);
+            // var unique_countries = new Set([]);
+            // var all_causes = Object.keys(all_data[0]).slice(4, 38);
+            // all_data.forEach(element => {
+            //     unique_countries.add(element["Country"])
+            // });
+            // all_data.forEach(element => {
+            //     unique_years.add(element["Year"])
+            // });
+            
+            
+        </script>
 
     </body>
 
