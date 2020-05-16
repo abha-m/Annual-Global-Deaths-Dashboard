@@ -15,10 +15,13 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-
-@app.route('/test', methods = ["GET"])
+@app.route('/try', methods = ["GET"])
 def test():
     return render_template("test.html")
+
+@app.route('/parallel', methods = ["GET"])
+def parallel():
+    return render_template("parallel.html")
 
 # @app.route('/api/generate_data', methods = ["POST"])
 # def generate_data():
