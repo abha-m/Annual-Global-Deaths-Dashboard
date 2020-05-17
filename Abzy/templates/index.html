@@ -169,24 +169,24 @@
                 e.stopPropagation();
             });
 
-            var selected_countries = [];
-            var selected_causes = [];
+            var selected_countries = new Set();
+            var selected_causes = new Set();
             var year;
 
             $(".checkbox-menu").on("change", "input[type='checkbox']", function() {
 
                 $(this).closest("li").toggleClass("active", this.checked);
 
-                selected_countries = [];
+                selected_countries = new Set();
                 $.each($("#countries-dropdown-list li label"), function(){
                     if ($(this).children()[0].checked)
-                        selected_countries.push($(this).text());
+                        selected_countries.add($(this).text());
                 });
 
-                selected_causes = [];
+                selected_causes = new Set();
                 $.each($("#causes-dropdown-list li label"), function(){
                     if ($(this).children()[0].checked)
-                        selected_causes.push($(this).text());
+                        selected_causes.add($(this).text());
                 });
 
                 console.log(selected_countries, selected_causes);
@@ -205,6 +205,7 @@
                 // selected_countries.forEach(element => url_string += element + "+");
 
                 console.log(year);
+                console.log(selected_countries, selected_causes);
                 
                 // url_string = url_string.concat("&?causes=");
                 selected_causes.forEach(element => url_string += "&causes=" + element);
