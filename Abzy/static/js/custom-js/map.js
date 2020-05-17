@@ -51,7 +51,6 @@ function removeA(arr) {
 var clicked_countries = [];
 function ready(error, topo) {
 let mouseOver = function(d) {
-    console.log(d)
     d3.selectAll(".Country")
     .transition()
     .duration(200)
@@ -62,7 +61,7 @@ let mouseOver = function(d) {
     .style("opacity", 1)
     .style("stroke", "black")
     tooltip.style("opacity", 1)
-            .html("Country: " + d["properties"]["name"] + "</br>HDI: " + d["total"])
+            .html("Country: " + d["properties"]["name"] + "</br>HDI: " + parseFloat(d["total"]).toPrecision(3))
             .style("left", (d3.mouse(this)[0]+70) + "px")
             .style("top", (d3.mouse(this)[1]) + "px")
     
@@ -98,7 +97,6 @@ let mouseClick = function(d) {
     .style("opacity", 1)
     .style("stroke", "black")
     }
-    console.log(clicked_countries);
 }
 
 // Draw the map
