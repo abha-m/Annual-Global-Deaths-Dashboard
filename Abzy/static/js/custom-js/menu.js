@@ -2,37 +2,24 @@
 var selected_countries = new Set(["India", "China"]);
 var selected_causes = new Set(["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)"]);
 
-$(".years-dropdown-item").click(function() {
-    // selected_years.add(parseInt(this.text));
-    var url_string = "/dropdown?years=";
-    url_string += this.text
-    // selected_years.forEach(element => url_string += element + "+");
+// document.getElementById("t1_whole_dataset").addEventListener("click", function() {
+//     plotGraph("whole_dataset");
+// });
 
-    // url_string = url_string.concat("&?countries=")
-    // selected_countries.forEach(element => url_string += element + "+");
-    
-
-    // url_string = url_string.concat("&?causes=");
-    selected_causes.forEach(element => url_string += "&causes=" + element);
-    selected_countries.forEach(element => url_string += "&countries=" + element);
-
-    var data;
-    $.ajax({
-        url: url_string,
-        success: function(response) {
-            data = JSON.parse(response);
-            console.log(data["bar_plot"])
-            plotScatterPlot(data["pca_plot"]);
-            // plotBarPlot(data["bar_plot"]);
-        }
-    })
-});
+// $("#years-dropdown-item").click(
+// );
 
 function plotScatterPlot(data) {
     // set the dimensions and margins of the graph
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 20, bottom: 10, left: 30};
+    var height = $("#r1c2").height() + 200;
+    var width = $("#r1c2").width() + 60;
+    
+    height = height - margin.top - margin.bottom;
+    width = width - margin.left - margin.right;
+
+    // remove previous plots
+    d3.select("#scatterplot").selectAll("svg").remove();
 
     // append the svg object to the body of the page
     var svg = d3.select("#scatterplot")
@@ -104,5 +91,3 @@ function plotScatterPlot(data) {
     return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
     }
 }
-
-

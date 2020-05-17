@@ -7,23 +7,22 @@ import json
 import pandas as pd
 
 returned_data = {}
-df = pd.read_csv("/Users/abha/Viz-Final-Project/Abzy/static/data/merged_data.csv")
+df = pd.read_csv("static/data/merged_data.csv")
 df = df.dropna()
 
 app = Flask(__name__)
-
-def computePCA(fil_df):
-    pca_model = PCA(n_components=2)
-    pca_model.fit(fil_df)
-    fil_df_transformed = pd.DataFrame(pca_model.transform(fil_df), columns=["PC1", "PC2"])
-    return fil_df_transformed
-
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
     all_data = df.to_dict(orient='records')
     returned_data["all_data"] = json.dumps(all_data)
     return render_template("index.html", returned_data = returned_data)
+
+@app.route('/menu', methods = ['POST', 'GET'])
+def menu():
+    all_data = df.to_dict(orient='records')
+    returned_data["all_data"] = json.dumps(all_data)
+    return render_template("menu_try.html", returned_data = returned_data)
 
 @app.route('/dropdown', methods=['POST', 'GET'])
 def filterByParams():
@@ -63,5 +62,11 @@ def filterByParams():
 
     return json.dumps(returned_data)
     
+def computePCA(fil_df):
+    pca_model = PCA(n_components=2)
+    pca_model.fit(fil_df)
+    fil_df_transformed = pd.DataFrame(pca_model.transform(fil_df), columns=["PC1", "PC2"])
+    return fil_df_transformed
+
 if __name__ == '__main__':
     app.run(debug=True)
