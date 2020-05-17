@@ -34,30 +34,33 @@ def filterByParams():
 
     # all_countries = params.split("?")[2].split("=")[1].split("+")[:-1]
     # all_causes = params.split("?")[3].split("=")[1].split("+")[:-1]
-    all_years = [2007]
-    all_causes = ["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)"]
-    all_countries = ["India", "China", "Afghanistan", "Bangladesh", "France"]
+    # all_causes = ["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)"]
+    year_arg = request.args.get('years')
+    all_causes = request.args.getlist('causes')
+    all_countries = request.args.getlist('countries')
 
+    '''  PCA  '''
     cols_to_select = all_causes
-
-    filtered_by_params = df[df["Year"] == 2007]
-
+    filtered_by_params = df[df["Year"] == int(year_arg)]
     filtered_by_params_causes = filtered_by_params[all_causes]
     transformed_df_PCA = computePCA(filtered_by_params_causes)
-
     filtered_by_params_causes["Sum"] = filtered_by_params_causes[all_causes].sum(axis=1)
-
     cols_to_select.append("HDI")
     cols_to_select.append("Country")
     filtered_by_params_causes_HDI_country = filtered_by_params[cols_to_select]
-
     transformed_df_PCA.index = filtered_by_params_causes.index
     transformed_df_PCA["Sum"] = filtered_by_params_causes["Sum"]
-
     transformed_df_PCA.index = filtered_by_params_causes_HDI_country.index
     transformed_df_PCA[["Country", "HDI"]] = filtered_by_params_causes_HDI_country[["Country", "HDI"]]
-
     returned_data["pca_plot"] = transformed_df_PCA.to_dict(orient='records')
+
+
+    '''  Barplot  '''
+    filtered_by_params = df[df["Year"] == int(year_arg)]
+    filtered_by_params = filtered_by_params[filtered_by_params["Country"].isin(all_countries)]
+    returned_data["bar_plot"] = filtered_by_params.to_dict(orient='records')
+    
+
     return json.dumps(returned_data)
     
 if __name__ == '__main__':
