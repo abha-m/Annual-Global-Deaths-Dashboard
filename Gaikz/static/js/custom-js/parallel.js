@@ -37,7 +37,7 @@ for (disease of disease_list) {
     dimensions.push(
         {
             name: disease,
-            scale: d3.scaleLinear().range([height, 0]),
+            scale: d3.scaleLinear().range([0, height]),
             type: "number"
         }
     )
@@ -70,7 +70,9 @@ d3.csv("/static/data/merged_data.csv", function(error, data) {
         return;
     }
 
-    data = data.filter(element => country_set.has(element["Country"]))
+    year = "2008";
+
+    data = data.filter(element => country_set.has(element["Country"]) & element["Year"] == year)
                .map(element => Object.assign({}, ...disease_list.map(key => ({[key]: element[key]}))))
     
     console.log(data);
@@ -150,7 +152,7 @@ d3.csv("/static/data/merged_data.csv", function(error, data) {
             .attr("class", "brush")
         .each(function(d) {
             // .y(d.scale)
-            d3.select(this).call(d.scale.brush = d3.brushY().extent([[0, d.scale.range()[0]], [10, d.scale.range()[1]]]).on("start", brushstart).on("brush", brush));
+            d3.select(this).call(d.scale.brush = d3.brushY().extent([[-10, d.scale.range()[0]], [10, d.scale.range()[1]]]).on("start", brushstart).on("brush", brush));
         })
         .selectAll("rect")
             .attr("x", -8)
@@ -166,6 +168,7 @@ function transition(g) {
     return g.transition().duration(500);
 }
 
+// TODO check for scaleBand here 
 // Returns the path for a given data point.
 function path(d) {
     //return line(dimensions.map(function(p) { return [position(p), y[p](d[p])]; }));
@@ -182,8 +185,11 @@ function brushstart() {
 
 // Handles a brush event, toggling the display of foreground lines.
 function brush() {
-    var actives = dimensions.filter(function(p) { return !p.scale.brush.empty(); }),
-        extents = actives.map(function(p) { return p.scale.brush.extent(); });
+    
+    // console.log(dimensions[0].scale.brush);
+
+    var actives = dimensions.filter(function(p) { return !p.scale.brush.empty(); });
+    var extents = dimensions.map(function(p) { return p.scale.brush.extent(); });
 
     foreground.style("display", function(d) {
         return actives.every(function(p, i) {
