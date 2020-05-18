@@ -10,7 +10,7 @@ function parallel_plot() {
     var height = $("#r1c2").height();
     var width = $("#r1c2").width();
 
-    var margin = {top: 50, right: 0, bottom: 0, left: 100};
+    var margin = {top: 50, right: 0, bottom: 0, left: 150};
                 // width = 960 - margin.left - margin.right,
                 // height = 500 - margin.top - margin.bottom;
 
@@ -76,28 +76,37 @@ function parallel_plot() {
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("/static/data/merged_data.csv", function(error, data) {
+    d3.csv("/static/data/merged_data.csv", function(error, data2) {
 
         if (error) {
             console.log(error);
             return;
         }
 
-        // country_set.has(element["Country"]) & 
-        data = data.filter(element => element["Year"] == year)
+        var parallel_countries = Array.from(unique_countries);
+        var total_len = 30;
+        var remaining_len = total_len - selected_countries.size;
+        var remaining_countries = new Set(parallel_countries.filter( ( el ) => !selected_countries.has( el ) ).slice(0, remaining_len));
+        // console.log(remaining_countries);
+
+        parallel_countries = new Set([...selected_countries, ...remaining_countries])
+        console.log(parallel_countries);
+
+        // remaining_countries.has(element["Country"]) & 
+        data2 = data2.filter(element => parallel_countries.has(element["Country"]) &  element["Year"] == year)
                 .map(element => Object.assign({}, ...disease_list.map(key => ({[key]: element[key]}))))
         
-        // console.log(data);
+        // console.log(data2);
         // console.log(dimensions);
         //Create the dimensions depending on attribute "type" (number|string)
         // The x-scale calculates the position by attribute dimensions[x].name
         dimensions.forEach(function(dimension) {
             dimension.scale.domain(dimension.type === "number"
-                ? d3.extent(data, function(d) { return +d[dimension.name]; })
-                : data.map(function(d) { return d[dimension.name]; }).sort());
+                ? d3.extent(data2, function(d) { return +d[dimension.name]; })
+                : data2.map(function(d) { return d[dimension.name]; }).sort());
 
             y[dimension.name] = d3.scaleLinear()
-                                .domain(d3.extent(data, function(p) { return +p[dimension.name]; }))
+                                .domain(d3.extent(data2, function(p) { return +p[dimension.name]; }))
                                 .range([height, 0])
             
         });
@@ -108,7 +117,7 @@ function parallel_plot() {
         background = svg_parallel.append("g")
                 .attr("class", "background")
             .selectAll("path")
-                .data(data)
+                .data(data2)
             .enter().append("path")
                 .attr("d", path);
 
@@ -116,7 +125,7 @@ function parallel_plot() {
         foreground = svg_parallel.append("g")
                 .attr("class", "foreground")
             .selectAll("path")
-                .data(data)
+                .data(data2)
             .enter().append("path")
                 .attr("d", path);
 
