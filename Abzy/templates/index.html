@@ -85,8 +85,7 @@
                 <div class="col-md-6 border border-dark" id = "scatterplot">
                 </div>
                     
-                <div class="col-md-6" id = "r2c2">
-                    4
+                <div class="col-md-6 border border-dark" id = "barplot">
                 </div>
 
             </div>
@@ -109,7 +108,10 @@
         <script src="{{ url_for('static',filename='js/custom-js/parallel.js') }}"></script>
 
         <!-- Scatterplot Script -->
-        <!-- <script src="{{ url_for('static',filename='js/custom-js/scatterplot.js') }}"></script> -->
+        <script src="{{ url_for('static',filename='js/custom-js/scatterplot.js') }}"></script>
+
+        <!-- Barplot Script -->
+        <script src="{{ url_for('static',filename='js/custom-js/barplot.js') }}"></script>
 
         <script>
             var all_data = {{ returned_data.all_data | safe }}
@@ -218,7 +220,7 @@
                         data = JSON.parse(response);
                         console.log(data["bar_plot"])
                         plotScatterPlot(data["pca_plot"]);
-                        // plotBarPlot(data["bar_plot"]);
+                        plotBarPlot(data["bar_plot"]);
                     }
                 })
             }

@@ -9,6 +9,7 @@ import pandas as pd
 returned_data = {}
 df = pd.read_csv("static/data/merged_data.csv")
 df = df.dropna()
+df = df.drop("Unnamed: 0", axis=1)
 
 app = Flask(__name__)
 
@@ -57,6 +58,14 @@ def filterByParams():
     '''  Barplot  '''
     filtered_by_params = df[df["Year"] == int(year_arg)]
     filtered_by_params = filtered_by_params[filtered_by_params["Country"].isin(all_countries)]
+    filtered_by_params = filtered_by_params.drop(["HDI", "Year", "Code"], axis=1)
+    # filtered_by_params = filtered_by_params[["Country", "Cardiovascular diseases (%)",\
+    #     "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)", "Dementia (%)",\
+    #         "Lower respiratory infections (%)", "Neonatal deaths (%)", "Diarrheal diseases (%)"]]
+    # cols = list(filtered_by_params.columns)
+    # cols[0], cols[4] = cols[4], cols[0]
+    # print(cols)
+    # filtered_by_params = filtered_by_params[cols]
     returned_data["bar_plot"] = filtered_by_params.to_dict(orient='records')
     
 
