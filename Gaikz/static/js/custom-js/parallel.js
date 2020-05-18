@@ -17,11 +17,11 @@ function parallel_plot() {
     height = height - margin.top - margin.bottom;
     width = width - margin.left - margin.right;
 
-    var country_list = Array.from(selected_countries).sort();
+    // var country_list = Array.from(selected_countries).sort();
     var disease_list = Array.from(selected_causes);
     disease_list.unshift("Country");
 
-    var country_set = selected_countries;
+    // var country_set = selected_countries;
 
     // var year = "2008";
 
@@ -83,7 +83,8 @@ function parallel_plot() {
             return;
         }
 
-        data = data.filter(element => country_set.has(element["Country"]) & element["Year"] == year)
+        // country_set.has(element["Country"]) & 
+        data = data.filter(element => element["Year"] == year)
                 .map(element => Object.assign({}, ...disease_list.map(key => ({[key]: element[key]}))))
         
         // console.log(data);
@@ -150,7 +151,7 @@ function parallel_plot() {
                                 .attr("visibility", null);
                     })
                 );
-
+        
         // // Add an axis and title.
         // .call(d3.axisBottom(xAxis))
         g.append("g")
@@ -158,7 +159,13 @@ function parallel_plot() {
             .each(function(d) { 
                 // console.log(d.name);
                 d3.select(this).call(axis.scale(d.scale))
-                    .attr("fill", "black");
+                    .attr("fill", "black")
+                    // .selectAll("text")
+                    //     .attr("transform", function() {
+                    //         if (d.name == "Country")
+                    //             return "rotate(-10)";
+                    //     })
+                        ;
                 })
                 .append("text")
                     .style("text-anchor", "middle")
