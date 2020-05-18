@@ -59,6 +59,7 @@ let mouseOver = function(d) {
     .transition()
     .duration(200)
     .style("opacity", 1)
+    .style("stroke", "black")
     tooltip.style("opacity", 1)
             .html("Country: " + d["properties"]["name"] + "</br>HDI: " + parseFloat(d["total"]).toPrecision(3))
             .style("left", (d3.mouse(this)[0]+70) + "px")
@@ -94,7 +95,7 @@ let mouseClick = function(d) {
     .transition()
     .duration(200)
     .style("opacity", 1)
-    .style("stroke", "red")
+    .style("stroke", "black")
     }
 }
 
