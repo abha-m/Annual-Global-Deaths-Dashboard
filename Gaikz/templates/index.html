@@ -77,17 +77,16 @@
                     <!-- <div id="parallel_coordinates" class="col-md-6 border-dark">
                     </div>                     -->
                 </div>
-                <div class="col-md-6 border border-dark" id = "scatterplot">
+
+                <div class="col-md-6 border-dark" id = "parallel_coordinates">
+                    <!-- 2 -->
                 </div>
 
-                
             </div>
 
             <div class="row" style="height: 250px;">
-                <div class="col-md-6 border-dark" id = "r1c2">
-                    <!-- 2 -->
-                </div>
-                    
+                <div class="col-md-6 border border-dark" id = "scatterplot">
+                </div>                    
                 <div class="col-md-6 border border-dark" id = "barplot">
                 </div>
 
@@ -240,7 +239,7 @@
                         }
                     })
                 
-                console.log(selected_causes);
+                // console.log(selected_causes);
 
                 d3.select("#causes-dropdown-list").selectAll("li")
                     .classed("active", function (d) {
