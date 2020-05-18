@@ -23,6 +23,8 @@ function parallel_plot() {
 
     var country_set = selected_countries;
 
+    // var year = "2008";
+
     // console.log(country_list);
     // console.log(country_set);
     // console.log(disease_list);
@@ -80,8 +82,6 @@ function parallel_plot() {
             console.log(error);
             return;
         }
-
-        year = "2008";
 
         data = data.filter(element => country_set.has(element["Country"]) & element["Year"] == year)
                 .map(element => Object.assign({}, ...disease_list.map(key => ({[key]: element[key]}))))

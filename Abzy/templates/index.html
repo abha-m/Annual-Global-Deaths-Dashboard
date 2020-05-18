@@ -19,13 +19,14 @@
         <div style="padding-left:5px; padding-right: 5px;"class="container-fluid">
             <nav style="padding-top:0%; padding-bottom: 0%;" class="navbar navbar-expand-lg navbar-light bg-light">
                 <span class="navbar-brand">The Annual Global Deaths Dashboard</span>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <form class="form-inline">
+                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="setToDefault();">Reset Dashboard</button>
+                </form>
                 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                     <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        
                       <!-- Navbar dd 1 -->
                       <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,12 +95,12 @@
         
         <!-- Bootstrap core JavaScript -->
         <!-- <script src="{{ url_for('static',filename='vendor/jquery/jquery.min.js') }}"></script> -->
-        <script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-        <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+        <!-- <script src="{{ url_for('static',filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script> -->
+        <script src="{{ url_for('static',filename='js/d3-scale-chromatic.v1.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/d3-geo-projection.v2.min.js') }}"></script>
 
         <!-- Menu Toggle Script -->
-        <script src="{{ url_for('static',filename='js/custom-js/menu.js') }}"></script>
+        <!-- <script src="{{ url_for('static',filename='js/custom-js/menu.js') }}"></script> -->
 
         <!-- Map Script -->
         <script src="{{ url_for('static',filename='js/custom-js/map.js') }}"></script>
@@ -171,9 +172,20 @@
                 e.stopPropagation();
             });
 
-            var selected_countries = new Set();
-            var selected_causes = new Set();
-            var year;
+
+            var selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
+            var selected_causes = new Set(["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
+            var year = "2016";
+            function setToDefault() {
+                // default values
+                selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
+                selected_causes = new Set(["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
+                year = "2016";
+                get_year(year);
+            }
+
+            parallel_plot();
+            get_year(year)
 
             $(".checkbox-menu").on("change", "input[type='checkbox']", function() {
 
@@ -221,6 +233,7 @@
                         console.log(data["bar_plot"])
                         plotScatterPlot(data["pca_plot"]);
                         plotBarPlot(data["bar_plot"]);
+                        parallel_plot();
                     }
                 })
             }
