@@ -19,16 +19,17 @@
         <div style="padding-left:5px; padding-right: 5px;"class="container-fluid">
             <nav style="padding-top:0%; padding-bottom: 0%;" class="navbar navbar-expand-lg navbar-light bg-light">
                 <span class="navbar-brand">The Annual Global Deaths Dashboard</span>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+
+                <form class="form-inline">
+                    <button class="btn btn-sm btn-outline-secondary" type="button" onclick="setToDefault();">Reset Dashboard</button>
+                </form>
                 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
                     <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                       <!-- Navbar dd 1 -->
                       <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_year" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Year
                         </a>
                         <div id="years-dropdown-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
@@ -115,7 +116,7 @@
 
         <script>
             var all_data = {{ returned_data.all_data | safe }}
-            var unique_years = new Set([2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]);
+            var unique_years = new Set([]);
             var unique_countries = new Set([]);
             var all_causes = Object.keys(all_data[0]).slice(4, 38);
             all_data.forEach(element => {
@@ -125,6 +126,8 @@
                 unique_years.add(element["Year"])
             });
             
+            unique_years = Array.from(unique_years).sort();
+
             // Populate years
             d3.select("#years-dropdown-list")
                 .selectAll("a")
@@ -138,7 +141,7 @@
                     return d;
                 })
                 .attr("onclick", function (d) {
-                    return "get_year(" + d + ")";
+                    return "get_year_data(" + d + ")";
                 })
                 .attr("class", "dropdown-item")
                 .attr("id", "years-dropdown-item");
@@ -172,16 +175,74 @@
             });
 
             // default values
-            var selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
-            var selected_causes = new Set(["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
-            var year = "2016";
+            var selected_countries;
+            var selected_causes;
+            var year;
+            var data;
+            setToDefault();
 
-            // call the graphs
-            parallel_plot();
-            get_year(year);
+            // for reset button
+            function setToDefault() {
+                // default values
+                selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
+                selected_causes = new Set(["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
+                year = "2016";
+
+                // call the graphs
+                get_year_data(year);
+
+                // set default active countries and causes
+                d3.select("#countries-dropdown-list").selectAll("li")
+                    .classed("active", function (d) {
+                        if (selected_countries.has(d3.select(this).select("label").text())) {
+                            d3.select(this).select("input").property('checked', true);
+                            return true;
+                        }
+                        else {
+                            d3.select(this).select("input").property('checked', false);
+                            return false;
+                        }
+                    })
+                
+                d3.select("#causes-dropdown-list").selectAll("li")
+                    .classed("active", function (d) {
+
+                        if (selected_causes.has(d3.select(this).select("label").text())) {
+                            d3.select(this).select("input").property('checked', true);
+                            return true;
+                        }
+                        else {
+                            d3.select(this).select("input").property('checked', false);
+                            return false;
+                        }
+                    })
+            }
+
+            function on_update() {
+                // console.log(data["bar_plot"])
+                plotScatterPlot(data["pca_plot"]);
+                plotBarPlot(data["bar_plot"]);
+                parallel_plot();
+                
+                // toggle year on select
+                // var a = $('a').filter(function(){
+                //     return $(this).text() == year;
+                // });
+                // console.log(a.text());
+                
+                // toggle year on select
+                d3.select("#years-dropdown-list").selectAll("a")
+                    .classed("active", function (d) {
+                        if (d == year)
+                            return true;
+                        else
+                            return false;
+                    });
+            }
 
             $(".checkbox-menu").on("change", "input[type='checkbox']", function() {
-
+                
+                // change checkbox color
                 $(this).closest("li").toggleClass("active", this.checked);
 
                 selected_countries = new Set();
@@ -196,37 +257,26 @@
                         selected_causes.add($(this).text());
                 });
 
-                console.log(selected_countries, selected_causes);
+                // console.log(selected_countries, selected_causes);
+                get_year_data(year);
 
             });
 
-            function get_year(f_year) {
+            function get_year_data(f_year) {
                 // selected_years.add(parseInt(this.text));
                 year = f_year;
 
                 var url_string = "/dropdown?years=";
                 url_string += f_year
-                // selected_years.forEach(element => url_string += element + "+");
 
-                // url_string = url_string.concat("&?countries=")
-                // selected_countries.forEach(element => url_string += element + "+");
-
-                // console.log(year);
-                // console.log(selected_countries, selected_causes);
-                
-                // url_string = url_string.concat("&?causes=");
                 selected_causes.forEach(element => url_string += "&causes=" + element);
                 selected_countries.forEach(element => url_string += "&countries=" + element);
 
-                var data;
                 $.ajax({
                     url: url_string,
                     success: function(response) {
                         data = JSON.parse(response);
-                        console.log(data["bar_plot"])
-                        plotScatterPlot(data["pca_plot"]);
-                        plotBarPlot(data["bar_plot"]);
-                        parallel_plot();
+                        on_update();
                     }
                 })
             }

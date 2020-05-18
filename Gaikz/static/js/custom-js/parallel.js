@@ -7,7 +7,7 @@ function parallel_plot() {
     // var width = 960;
     // var height = 500;
 
-    var height = $("#r1c2").height() + 100;
+    var height = $("#r1c2").height();
     var width = $("#r1c2").width();
 
     var margin = {top: 50, right: 0, bottom: 0, left: 100};
