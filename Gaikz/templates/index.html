@@ -68,7 +68,7 @@
                 </div>
             </nav>
 
-            <div class="row">
+            <div class="row" style="height: 250px;">
                 <div class="col-md-6" id = "r1c1">
                 <!-- <div class="col-lg" id = "r1c1"></div> -->
                     <div id="world_map_div" class="border border-dark">
@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" style="height: 250px;">
                 <div class="col-md-6 border border-dark" id = "scatterplot">
                 </div>
                     
@@ -128,65 +128,99 @@
             
             unique_years = Array.from(unique_years).sort();
 
-            // Populate years
-            d3.select("#years-dropdown-list")
-                .selectAll("a")
-                .data(Array.from(unique_years))
-                .enter()
-                .append("a")
-                .text(function (d) {
-                    return d;
-                })
-                .attr("value", function (d) {
-                    return d;
-                })
-                .attr("onclick", function (d) {
-                    return "get_year_data(" + d + ")";
-                })
-                .attr("class", "dropdown-item")
-                .attr("id", "years-dropdown-item");
+            // default values
+            var selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
+            var selected_causes = new Set(["Dementia (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
+            var year = 2016;
+            var data;
 
-            // populate countries
-            var divs_countries = d3.select("#countries-dropdown-list")
+            bring_selected_on_top();
+
+            function bring_selected_on_top () {
+                function removeAll(originalSet, toBeRemovedSet) {
+                    toBeRemovedSet.forEach(Set.prototype.delete, originalSet);
+                }
+
+                // console.log(unique_countries);
+                // removeAll(unique_countries, selected_countries);
+                // unique_countries = new Set([...selected_countries, ...unique_countries]);
+                // console.log(unique_countries);
+
+                // console.log(all_causes);
+                // all_causes = all_causes.filter( ( el ) => !selected_causes.has( el ) );
+                // all_causes = [...selected_causes, ...all_causes];
+                // console.log(all_causes);
+
+                // console.log(unique_years);
+                unique_years = unique_years.filter( ( el ) => el != year );
+                unique_years = [year, ...unique_years.sort()];
+                // console.log(unique_years);
+
+                // clear old
+                d3.select("#years-dropdown-list")
+                    .selectAll("a").remove();
+
+                // Populate years
+                d3.select("#years-dropdown-list")
+                    .selectAll("a")
+                    .data(Array.from(unique_years))
+                    .enter()
+                    .append("a")
+                    .text(function (d) {
+                        return d;
+                    })
+                    .attr("value", function (d) {
+                        return d;
+                    })
+                    .attr("onclick", function (d) {
+                        return "get_year_data(" + d + ")";
+                    })
+                    .attr("class", "dropdown-item")
+                    .attr("id", "years-dropdown-item");
+
+                // clear old
+                // d3.select("#countries-dropdown-list")
+                //     .selectAll("li").remove();
+
+                // populate countries
+                var divs_countries = d3.select("#countries-dropdown-list")
+                            .selectAll("li")
+                            .data(Array.from(unique_countries))
+                            .enter()
+                            .append("li")
+                            .append("label")
+                                .text(function (d) { return d; })
+                            .append("input")
+                                .attr("type", "checkbox");
+                
+                // clear old
+                // d3.select("#causes-dropdown-list")
+                //     .selectAll("li").remove();
+
+                var divs_countries = d3.select("#causes-dropdown-list")
                         .selectAll("li")
-                        .data(Array.from(unique_countries))
+                        .data(Array.from(all_causes))
                         .enter()
                         .append("li")
                         .append("label")
                             .text(function (d) { return d; })
                         .append("input")
                             .attr("type", "checkbox");
+            }
             
-            var divs_countries = d3.select("#causes-dropdown-list")
-                    .selectAll("li")
-                    .data(Array.from(all_causes))
-                    .enter()
-                    .append("li")
-                    .append("label")
-                        .text(function (d) { return d; })
-                    .append("input")
-                        .attr("type", "checkbox");
-            
-        </script>
-
-        <script>
+            // menu dropdown
             $(document).on('click', '.allow-focus', function (e) {
                 e.stopPropagation();
             });
 
-            // default values
-            var selected_countries;
-            var selected_causes;
-            var year;
-            var data;
+            // for reset button
             setToDefault();
 
-            // for reset button
             function setToDefault() {
                 // default values
                 selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
-                selected_causes = new Set(["Cardiovascular diseases (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
-                year = "2016";
+                selected_causes = new Set(["Dementia (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
+                year = 2016;
 
                 // call the graphs
                 get_year_data(year);
@@ -204,6 +238,8 @@
                         }
                     })
                 
+                console.log(selected_causes);
+
                 d3.select("#causes-dropdown-list").selectAll("li")
                     .classed("active", function (d) {
 
@@ -219,16 +255,11 @@
             }
 
             function on_update() {
+                bring_selected_on_top();
                 // console.log(data["bar_plot"])
                 plotScatterPlot(data["pca_plot"]);
                 plotBarPlot(data["bar_plot"]);
                 parallel_plot();
-                
-                // toggle year on select
-                // var a = $('a').filter(function(){
-                //     return $(this).text() == year;
-                // });
-                // console.log(a.text());
                 
                 // toggle year on select
                 d3.select("#years-dropdown-list").selectAll("a")
