@@ -131,9 +131,9 @@ function parallel_plot(data_parallel) {
             .enter().append("path")
                 .attr("d", path)
                 .style("stroke", function (d) {
-                    console.log(country_color_dict);
+                    // console.log(country_color_dict);
                     if (selected_countries.has(d["Country"])) {
-                        console.log(country_color_dict[d["Country"]]);
+                        // console.log(country_color_dict[d["Country"]]);
                         return country_color_dict[d["Country"]];
                     }
                 });

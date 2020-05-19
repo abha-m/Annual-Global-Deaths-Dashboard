@@ -33,8 +33,6 @@
                           Year
                         </a>
                         <div id="years-dropdown-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <!-- <a class="years-dropdown-item dropdown-item"> 2007 </a>
-                            <a class="years-dropdown-item dropdown-item"> 2008 </a> -->
                         </div>
                       </li>
                       <!-- Navbar dd 2 -->
@@ -43,17 +41,8 @@
                           Countries
                         </a>
                         <ul id="countries-dropdown-list" class="dropdown-menu checkbox-menu dropdown-menu-right allow-focus" aria-labelledby="dropdownMenu1">
-  
-                            <!-- <li >
-                              <label>
-                                <input type="checkbox"> Cheese
-                              </label>
-                            </li> -->
                             
                         </ul>
-                        <!-- <div id="countries-dropdown-list" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                          
-                        </div> -->
                       </li>
                       <!-- Navbar dd 3 -->
                       <li class="nav-item dropdown">
@@ -68,11 +57,10 @@
                 </div>
             </nav>
 
-            <div class="row" style="height: 250px;">
+            <div class="row" style="height: 380px;">
                 <div class="col-md-6" id = "r1c1">
-                <!-- <div class="col-lg" id = "r1c1"></div> -->
                     <div id="world_map_div" class="border border-dark">
-                        <svg id="world_map" width="" height=""></svg>
+                        <!-- <svg id="world_map" width="" height=""></svg> -->
                     </div>
                     <!-- <div id="parallel_coordinates" class="col-md-6 border-dark">
                     </div>                     -->
@@ -84,7 +72,7 @@
 
             </div>
 
-            <div class="row" style="height: 250px;">
+            <div class="row" style="height: 100px;">
                 <div class="col-md-6 border border-dark" id = "scatterplot">
                 </div>                    
                 <div class="col-md-6 border border-dark" id = "barplot">
@@ -263,6 +251,14 @@
                     parallel_plot(data);
                     plotScatterPlot(data);
                 }
+                else if (update_coming_from == "map") {
+                    console.log("map");
+                    plotMap(data);
+                    plotBarPlot(data);
+                    parallel_plot(data);
+                    plotScatterPlot(data);
+                }
+                
 
                 // toggle year on select
                 d3.select("#years-dropdown-list").selectAll("a")
