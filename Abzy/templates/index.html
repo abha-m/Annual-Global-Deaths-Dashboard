@@ -77,17 +77,16 @@
                     <!-- <div id="parallel_coordinates" class="col-md-6 border-dark">
                     </div>                     -->
                 </div>
-                <div class="col-md-6 border border-dark" id = "scatterplot">
+
+                <div class="col-md-6 border-dark" id = "parallel_coordinates">
+                    <!-- 2 -->
                 </div>
 
-                
             </div>
 
             <div class="row" style="height: 250px;">
-                <div class="col-md-6 border-dark" id = "r1c2">
-                    <!-- 2 -->
-                </div>
-                    
+                <div class="col-md-6 border border-dark" id = "scatterplot">
+                </div>                    
                 <div class="col-md-6 border border-dark" id = "barplot">
                 </div>
 
@@ -134,6 +133,10 @@
             var selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
             var selected_causes = new Set(["Dementia (%)", "Cancers (%)", "Respiratory diseases (%)", "Diabetes (%)"]);
             var year = 2016;
+            var colors = ["#FF1493", "#DB7093", "#7B68EE", "#CD5C5C", "#FF0000", "#FFA500", "#FFDAB9", "#7FFF00", "#00FF00", "#00FA9A", "#9ACD32", "#20B2AA", "#00FFFF", "#4682B4", "#0000FF", "#191970", "#BC8F8F", "#A0522D", "#778899"];
+            var country_color_dict = {};
+            var colors_iterator = 0;
+
             var data;
 
             bring_selected_on_top();
@@ -230,8 +233,13 @@
                 // set default active countries and causes
                 d3.select("#countries-dropdown-list").selectAll("li")
                     .classed("active", function (d) {
-                        if (selected_countries.has(d3.select(this).select("label").text())) {
+                        var selected_country = d3.select(this).select("label").text()
+                        if (selected_countries.has(selected_country)) {
                             d3.select(this).select("input").property('checked', true);
+                            if(!(selected_country in country_color_dict)) {
+                                country_color_dict[selected_country] = colors[colors_iterator % colors.length];
+                                colors_iterator++;
+                            }
                             return true;
                         }
                         else {
@@ -258,8 +266,8 @@
 
             function on_update() {
                 bring_selected_on_top();
-                // console.log(data["bar_plot"])
-                plotScatterPlot(data["pca_plot"]);
+                plotMap(data["map_HDI"]);
+                plotScatterPlot(data["pca_plot"], data["map_HDI"]);
                 plotBarPlot(data["bar_plot"]);
                 parallel_plot();
                 
@@ -280,8 +288,15 @@
 
                 selected_countries = new Set();
                 $.each($("#countries-dropdown-list li label"), function(){
-                    if ($(this).children()[0].checked)
-                        selected_countries.add($(this).text());
+                    if ($(this).children()[0].checked) {
+                        var selected_country = $(this).text();
+                        selected_countries.add(selected_country);
+                        if(!(selected_country in country_color_dict)) {
+                            country_color_dict[selected_country] = colors[colors_iterator % colors.length];
+                            colors_iterator++;
+                        }
+                }
+                        
                 });
 
                 selected_causes = new Set();
