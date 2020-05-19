@@ -112,6 +112,7 @@ function plotScatterPlot(dataset_plot) {
         .on("end", function() { 
             console.log(selected_countries); 
             get_year_data(year, "scatter");
+            update_actives();
         })
     )
 

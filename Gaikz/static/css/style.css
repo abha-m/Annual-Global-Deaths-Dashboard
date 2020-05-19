@@ -55,7 +55,7 @@ svg {
 
 .foreground path {
     fill: none;
-    stroke: steelblue;
+    /* stroke: rgb(204, 204, 204); */
 }
 
 .brush .extent {

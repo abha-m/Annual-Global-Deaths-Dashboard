@@ -129,7 +129,14 @@ function parallel_plot(data_parallel) {
             .selectAll("path")
                 .data(data2)
             .enter().append("path")
-                .attr("d", path);
+                .attr("d", path)
+                .style("stroke", function (d) {
+                    console.log(country_color_dict);
+                    if (selected_countries.has(d["Country"])) {
+                        console.log(country_color_dict[d["Country"]]);
+                        return country_color_dict[d["Country"]];
+                    }
+                });
 
         // Add a group element for each dimension.
         var g = svg_parallel.selectAll(".dimension")
