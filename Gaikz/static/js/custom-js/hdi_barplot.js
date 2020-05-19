@@ -2,7 +2,7 @@ function hdi_barplot(data2) {
     
 
     var data = data2["map_HDI"].filter( (el) => (selected_countries.has(el.Entity)));
-    console.log(data, selected_countries);
+    // console.log(data, selected_countries);
 
     // var height = $("#hdi_barplot").height();
     // var width = $("#hdi_barplot").width();
@@ -10,7 +10,7 @@ function hdi_barplot(data2) {
     var height = 550;
     var width = 200;
     
-    console.log(height, width);
+    // console.log(height, width);
 
     var margin = {top: 20, right: 10, bottom: 30, left: 10},
         width = width - margin.left - margin.right,

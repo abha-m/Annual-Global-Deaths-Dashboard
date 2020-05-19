@@ -31,7 +31,7 @@ function plotScatterPlot(dataset_plot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.6, 0.5)");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.9, 0.8)");
 
 
     // Add X axis
@@ -94,7 +94,7 @@ function plotScatterPlot(dataset_plot) {
         .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         // .on("", clear_selected_countries)
         .on("start brush", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
-        .on("end", function() { 
+        .on("end", function() {
             get_year_data(year, "scatter");
             update_actives();
         })
@@ -110,7 +110,7 @@ function plotScatterPlot(dataset_plot) {
         
         extent = d3.event.selection
         // add color here 
-        myCircle.classed("selected", function(d){ return isBrushed(extent, x(d.PC1), y(d.PC2), d.Country ) } )
+        myCircle.classed("selected", function(d){ return isBrushed(extent, x(d.PC1), y(d.PC2), d.Country, this, d) } )
 
         if (!selected_countries.size) {
             selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
@@ -122,14 +122,24 @@ function plotScatterPlot(dataset_plot) {
     }
 
     // A function that return TRUE or FALSE according if a dot is in the selection or not
-    function isBrushed(brush_coords, cx, cy, country) {
+    function isBrushed(brush_coords, cx, cy, country, d, val) {
 
         var x0 = brush_coords[0][0],
             x1 = brush_coords[1][0],
             y0 = brush_coords[0][1],
             y1 = brush_coords[1][1];
+
+        // if (country == "Argentina")
+        //     console.log(d);
         if(x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1) {
             selected_countries.add(country);
+            if(!(country in country_color_dict)) {
+                // console.log(val);
+                country_color_dict[country] = colors[colors_iterator % colors.length];
+                colors_iterator++;
+            }
+            d3.select(d).style("fill", country_color_dict[country]);
+
             // this.style("fill", function(d) {
             //     if(d.Country in selected_countries) {
             //         return country_color_dict[d.Country];
@@ -140,6 +150,12 @@ function plotScatterPlot(dataset_plot) {
             //     colors_iterator++;
             // }
             return true;
+        }
+        else {
+            d3.select(d)
+            .style("fill", color(val.HDI))
+            .style("opacity", "0.4");
+            return false;
         }
     // return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
     }
