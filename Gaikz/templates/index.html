@@ -275,6 +275,13 @@
                     parallel_plot(data);
                 }
                 
+                else if (update_coming_from == "scatter") {
+                    console.log("scatter");
+                    plotMap(data);
+                    plotBarPlot(data);
+                    parallel_plot(data);
+                }
+
                 // toggle year on select
                 d3.select("#years-dropdown-list").selectAll("a")
                     .classed("active", function (d) {

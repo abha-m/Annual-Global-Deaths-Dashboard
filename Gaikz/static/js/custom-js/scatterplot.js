@@ -109,7 +109,10 @@ function plotScatterPlot(dataset_plot) {
         .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
         // .on("", clear_selected_countries)
         .on("start brush", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
-        .on("end", function() { console.log(selected_countries); })
+        .on("end", function() { 
+            console.log(selected_countries); 
+            get_year_data(year, "scatter");
+        })
     )
 
     // function clear_selected_countries() {
@@ -127,8 +130,6 @@ function plotScatterPlot(dataset_plot) {
         if (!selected_countries.size) {
             selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
         }
-
-        // get_year_data(year);
         // plotBarPlot(data["bar_plot"]);
         // parallel_plot();
 
