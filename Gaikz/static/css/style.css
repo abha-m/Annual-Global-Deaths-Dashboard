@@ -70,6 +70,24 @@ svg {
     shape-rendering: crispEdges;
 }
 
+/* HDI PLOT 3 */
+
+.bar {
+    fill: #5f89ad;
+}
+
+.axis {
+    font-size: 13px;
+}
+
+.tick line {
+    visibility:hidden;
+}
+
+/* .y.axis path, .y.axis line {
+    stroke: none;
+} */
+
 .axis line,
 .axis path {
     fill: none;

@@ -152,7 +152,14 @@ function plotMap(data) {
         })
         .style("stroke", "transparent")
         .attr("class", function(d){ return "Country" } )
-        .style("opacity", .8)
+        .style("opacity", function(d) {
+            if(selected_countries.has(d["properties"]["name"])) {
+                return 1.2;
+            }
+            else {
+                return 0.8;
+            }
+        })
         .on("mouseover", mouseOver )
         .on("mouseleave", mouseLeave )
         .on("click", mouseClick )

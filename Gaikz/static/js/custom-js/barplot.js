@@ -50,10 +50,12 @@ function plotBarPlot(data_barplot) {
         sortable = sortable.slice(1, extra_len).sort(function(a, b){return b[1] - a[1]})
         // console.log(sortable);
 
+        to_keep_2 = {}
         for (j = 0; j < sortable.length; j++) {
-            to_keep[sortable[j][0]] = sortable[j][1];
+            to_keep_2[sortable[j][0]] = sortable[j][1];
         }
         // console.log(to_keep);
+        to_keep = {...to_keep_2, ...to_keep};
 
         data[i] = to_keep;
     }
@@ -70,7 +72,7 @@ function plotBarPlot(data_barplot) {
     width = width - margin.left - margin.right,
     height = height - margin.top - margin.bottom;
 
-    console.log(height, width);
+    // console.log(height, width);
 
     d3.select("#barplot").selectAll("svg").remove();
 
@@ -111,7 +113,7 @@ function plotBarPlot(data_barplot) {
     }
     var mousemove = function(d) {
         tooltip
-        .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+        .style("left", (d3.mouse(this)[0]-10) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
         .style("top", (d3.mouse(this)[1]) + "px")
     }
     var mouseleave = function(d) {

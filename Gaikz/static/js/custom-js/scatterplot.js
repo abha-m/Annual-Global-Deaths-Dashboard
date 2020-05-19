@@ -31,7 +31,8 @@ function plotScatterPlot(dataset_plot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.9, 0.8)");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.6, 0.5)");
+
 
     // Add X axis
     var x = d3.scaleLinear()
@@ -51,8 +52,8 @@ function plotScatterPlot(dataset_plot) {
     .call(d3.axisLeft(y));
 
     var color = d3.scaleLinear()
-                    .domain([d3.min(scatter_data, function (d) { return +d["Sum"]; }),
-                    d3.max(scatter_data, function (d) { return +d["Sum"]; })])
+                    .domain([d3.min(scatter_data, function (d) { return +d["HDI"]; }),
+                    d3.max(scatter_data, function (d) { return +d["HDI"]; })])
                     .range(["#F3F5FF", "#406AA9"])
 
     var country_colorScale = d3.scaleOrdinal()
@@ -69,15 +70,23 @@ function plotScatterPlot(dataset_plot) {
     .append("circle")
     .attr("cx", function (d) { return x(d.PC1); } )
     .attr("cy", function (d) { return y(d.PC2); } )
-    .attr("r", function(d) { return d.HDI * 15; })
+    .attr("r", function(d) { return d.Sum / 5; })
     .style("fill", function (d) { if(selected_countries.has(d.Country)) { 
                                     // return selected_color(d.Sum);
                                     // return country_colorScale(d.Country);
                                     return country_color_dict[d.Country];
                                 } 
-                                return color(d.Sum); } )
-    .style("opacity", 0.7)
+                                return color(d.HDI); } )
+    .style("opacity", function (d) {
+        if(selected_countries.has(d.Country)) {
+            return 1.2;
+        }
+        else {
+            return 0.4;
+        }
+    })
     .attr("stroke", "#000")
+    
 
     // Add brushing
     svg
