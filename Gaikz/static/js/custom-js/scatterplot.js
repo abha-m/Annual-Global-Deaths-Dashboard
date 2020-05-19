@@ -31,7 +31,10 @@ function plotScatterPlot(dataset_plot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.9, 0.8)");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.9, 0.8)")
+    
+    
+    ;
 
 
     // Add X axis

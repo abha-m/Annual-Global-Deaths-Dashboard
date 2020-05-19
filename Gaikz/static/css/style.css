@@ -74,10 +74,11 @@ svg {
 
 .bar {
     fill: #5f89ad;
+    /* margin: 10px 10px 15px; */
 }
 
 .axis {
-    font-size: 8px;
+    font-size: 10px;
 }
 
 .tick line {

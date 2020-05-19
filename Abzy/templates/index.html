@@ -55,31 +55,36 @@
                 </div>
             </nav>
 
-            <div class="row" style="height: 280px;">
-
-                <div class="col-md-7 border border-dark" id = "world_map_div">
-                    <!-- <svg id="world_map"></svg> -->
-                </div>
-
-                <div class="col-md-5 border border-dark" id = "parallel_coordinates">
-                </div>
-            
-                <!-- <div class="col-md-4 border border-dark" id = "hdi_test">
-                </div> -->
-
-            </div>
-
             <div class="row">
-                
-                <div class="col-md-4 border border-dark" id = "scatterplot">
-                </div>            
+                <div class="col-md-10">
+                    <div class="row" style="height: 280px;">
 
-                <div class="col-md-4 border border-dark" id = "barplot">
+                        <div class="col-md-7 border border-dark" id = "world_map_div">
+                            <!-- <svg id="world_map"></svg> -->
+                        </div>
+        
+                        <div class="col-md-5 border border-dark" id = "parallel_coordinates">
+                        </div>
+                    
+                        <!-- <div class="col-md-4 border border-dark" id = "hdi_test">
+                        </div> -->
+        
+                    </div>
+        
+                    <div class="row">
+                        
+                        <div class="col-md-6 border border-dark" id = "scatterplot">
+                        </div>            
+        
+                        <div class="col-md-6 border border-dark" id = "barplot">
+                        </div>
+        
+                    </div>
+
                 </div>
 
-                <div class="col-md-4 border border-dark" id = "piechart">
+                <div class="col-md-2 border border-dark" id = "hdi_barplot">
                 </div>
-
             </div>
         
         </div>
@@ -98,6 +103,9 @@
 
         <!-- Barplot Script -->
         <script src="{{ url_for('static',filename='js/custom-js/barplot.js') }}"></script>
+
+        <!-- Barplot 2 Script -->
+        <script src="{{ url_for('static',filename='js/custom-js/hdi_barplot.js') }}"></script>
 
         <script>
             var all_data = {{ returned_data.all_data | safe }}
@@ -186,7 +194,7 @@
 
             // for reset button
             setToDefault();
-
+            
             function setToDefault() {
                 // default values
                 selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
@@ -234,6 +242,7 @@
 
             function on_update(update_coming_from) {
                 bring_selected_on_top();
+                hdi_barplot(data);
 
                 if (update_coming_from == "dropdown") {
                     // console.log("dropdown");

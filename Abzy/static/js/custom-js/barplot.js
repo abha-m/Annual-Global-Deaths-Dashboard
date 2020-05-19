@@ -50,10 +50,12 @@ function plotBarPlot(data_barplot) {
         sortable = sortable.slice(1, extra_len).sort(function(a, b){return b[1] - a[1]})
         // console.log(sortable);
 
+        to_keep_2 = {}
         for (j = 0; j < sortable.length; j++) {
-            to_keep[sortable[j][0]] = sortable[j][1];
+            to_keep_2[sortable[j][0]] = sortable[j][1];
         }
         // console.log(to_keep);
+        to_keep = {...to_keep_2, ...to_keep};
 
         data[i] = to_keep;
     }
@@ -70,7 +72,7 @@ function plotBarPlot(data_barplot) {
     width = width - margin.left - margin.right,
     height = height - margin.top - margin.bottom;
 
-    console.log(height, width);
+    // console.log(height, width);
 
     d3.select("#barplot").selectAll("svg").remove();
 
@@ -99,7 +101,7 @@ function plotBarPlot(data_barplot) {
         .style("border", "solid")
         .style("border-width", "1px")
         .style("border-radius", "5px")
-        .style("padding", "5px")
+        .style("padding", "10px")
 
     // Three function that change the tooltip when user hover / move / leave a cell
     var mouseover = function(d) {
@@ -111,7 +113,7 @@ function plotBarPlot(data_barplot) {
     }
     var mousemove = function(d) {
         tooltip
-        .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+        .style("left", (d3.mouse(this)[0]-10) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
         .style("top", (d3.mouse(this)[1]) + "px")
     }
     var mouseleave = function(d) {
@@ -126,7 +128,11 @@ function plotBarPlot(data_barplot) {
     .padding([0.2])
     svg.append("g")
     .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x).tickSizeOuter(0));
+    .call(d3.axisBottom(x).tickSizeOuter(0))
+    .selectAll("text")
+    .attr("transform",
+    "translate(-10, 20) "+
+    "rotate(-30)");
 
     // Add Y axis
     var y = d3.scaleLinear()
@@ -193,7 +199,7 @@ function plotBarPlot(data_barplot) {
         .attr("y", function(d) { return y(d[1]); })
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width",x.bandwidth())
-        .attr("stroke", "black")
+        .attr("stroke", "#5F89AD")
         .attr("stroke-width", "0.5")
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)

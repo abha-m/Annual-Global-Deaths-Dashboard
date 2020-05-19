@@ -83,7 +83,15 @@ function plotBarPlot(data_barplot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.8, 0.70)");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.8, 0.75)")
+
+    svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Cause Percentage");
 
     // List of subgroups = header of the csv files = soil condition here
     var subgroups = removeA(Object.keys(data[0]), "Country")
