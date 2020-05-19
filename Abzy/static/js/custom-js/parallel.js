@@ -7,8 +7,8 @@ function parallel_plot() {
     // var width = 960;
     // var height = 500;
 
-    var height = $("#r1c2").height();
-    var width = $("#r1c2").width();
+    var height = $("#parallel_coordinates").height();
+    var width = $("#parallel_coordinates").width();
 
     var margin = {top: 50, right: 0, bottom: 0, left: 150};
                 // width = 960 - margin.left - margin.right,
@@ -68,9 +68,9 @@ function parallel_plot() {
         foreground;
 
     // remove old svgs
-    d3.select("#r1c2").selectAll("svg").remove();
+    d3.select("#parallel_coordinates").selectAll("svg").remove();
 
-    var svg_parallel = d3.select("#r1c2").append("svg")
+    var svg_parallel = d3.select("#parallel_coordinates").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -90,7 +90,7 @@ function parallel_plot() {
         // console.log(remaining_countries);
 
         parallel_countries = new Set([...selected_countries, ...remaining_countries])
-        console.log(parallel_countries);
+        // console.log(parallel_countries);
 
         // remaining_countries.has(element["Country"]) & 
         data2 = data2.filter(element => parallel_countries.has(element["Country"]) &  element["Year"] == year)
