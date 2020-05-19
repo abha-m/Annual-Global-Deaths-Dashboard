@@ -1,4 +1,6 @@
-function plotMap(dataset) {
+function plotMap(data) {
+    var dataset = data["map_HDI"];
+    
     var height = $("#r1c1").height();
     var width = $("#r1c1").width();
     d3.select("#world_map_div").selectAll("svg").remove();
@@ -32,7 +34,7 @@ function plotMap(dataset) {
     dataset.forEach(element => {
         data.set(element.Code, +element.HDI);
     });
-    console.log(data)
+    // console.log(data)
 
     var colorScale = d3.scaleThreshold()
     .domain([0.2, 0.4, 0.5, 0.6, 0.7, 0.9])
@@ -65,7 +67,7 @@ function plotMap(dataset) {
     // .interpolate(d3.interpolateHcl)
     .range(colors);
     // .range([d3.rgb("#007AFF"), d3.rgb('#FFF500')]);
-    console.log(country_colorScale);
+    // console.log(country_colorScale);
 
 
     // Load external data and boot
@@ -85,7 +87,7 @@ function plotMap(dataset) {
         return arr;
     }
 
-    var clicked_countries = [];
+    // var clicked_countries = [];
     function ready(error, topo) {
     let mouseOver = function(d) {
         d3.selectAll(".Country")
@@ -104,7 +106,7 @@ function plotMap(dataset) {
     }
 
     let mouseLeave = function(d) {
-        if(!clicked_countries.includes(d.id)) {
+        if(!selected_countries.has(d["properties"]["name"])) {
         d3.selectAll(".Country")
             .transition()
             .duration(200)
@@ -118,8 +120,8 @@ function plotMap(dataset) {
     }
 
     let mouseClick = function(d) {
-        if(clicked_countries.includes(d.id)) {
-            removeA(clicked_countries, d.id);
+        if(selected_countries.has(d["properties"]["name"])) {
+            removeA(selected_countries, d["properties"]["name"]);
             d3.select(this)
                 .transition()
                 .duration(200)
@@ -130,16 +132,16 @@ function plotMap(dataset) {
                 })
         }
         else {
-        clicked_countries.push(d.id);
-        d3.select(this)
-        .transition()
-        .duration(200)
-        .style("opacity", 1)
-        .attr("fill", function (d) {
-            // d.total = data.get(d.id);
-            console.log(country_colorScale(d.id));
-            return country_colorScale(d.id) || 0;
-        })
+            selected_countries.add(d["properties"]["name"]);
+            d3.select(this)
+            .transition()
+            .duration(200)
+            .style("opacity", 1)
+            .attr("fill", function (d) {
+                // d.total = data.get(d.id);
+                console.log(country_colorScale(d.id));
+                return country_colorScale(d.id) || 0;
+            });
         }
     }
 
@@ -155,8 +157,16 @@ function plotMap(dataset) {
         )
         // set the color of each country
         .attr("fill", function (d) {
-            d.total = data.get(d.id) || 0;
-            return colorScale(d.total);
+            if(selected_countries.has(d["properties"]["name"])) {
+                console.log(country_color_dict[d["properties"]["name"]]);
+                d.total = data.get(d.id) || 0;
+                return country_color_dict[d["properties"]["name"]];
+            }
+            else {
+                d.total = data.get(d.id) || 0;
+                return colorScale(d.total);
+            }
+            
         })
         .style("stroke", "transparent")
         .attr("class", function(d){ return "Country" } )

@@ -142,19 +142,6 @@
             bring_selected_on_top();
 
             function bring_selected_on_top () {
-                function removeAll(originalSet, toBeRemovedSet) {
-                    toBeRemovedSet.forEach(Set.prototype.delete, originalSet);
-                }
-
-                // console.log(unique_countries);
-                // removeAll(unique_countries, selected_countries);
-                // unique_countries = new Set([...selected_countries, ...unique_countries]);
-                // console.log(unique_countries);
-
-                // console.log(all_causes);
-                // all_causes = all_causes.filter( ( el ) => !selected_causes.has( el ) );
-                // all_causes = [...selected_causes, ...all_causes];
-                // console.log(all_causes);
 
                 // console.log(unique_years);
                 unique_years = unique_years.filter( ( el ) => el != year );
@@ -178,14 +165,10 @@
                         return d;
                     })
                     .attr("onclick", function (d) {
-                        return "get_year_data(" + d + ")";
+                        return "get_year_data(" + d + ", 'dropdown')";
                     })
                     .attr("class", "dropdown-item")
                     .attr("id", "years-dropdown-item");
-
-                // clear old
-                // d3.select("#countries-dropdown-list")
-                //     .selectAll("li").remove();
 
                 // populate countries
                 var divs_countries = d3.select("#countries-dropdown-list")
@@ -197,12 +180,8 @@
                                 .text(function (d) { return d; })
                             .append("input")
                                 .attr("type", "checkbox");
-                
-                // clear old
-                // d3.select("#causes-dropdown-list")
-                //     .selectAll("li").remove();
 
-                var divs_countries = d3.select("#causes-dropdown-list")
+                var divs_causes = d3.select("#causes-dropdown-list")
                         .selectAll("li")
                         .data(Array.from(all_causes))
                         .enter()
@@ -228,8 +207,12 @@
                 year = 2016;
 
                 // call the graphs
-                get_year_data(year);
+                get_year_data(year, "dropdown");
 
+                update_actives();
+            }
+
+            function update_actives() {
                 // set default active countries and causes
                 d3.select("#countries-dropdown-list").selectAll("li")
                     .classed("active", function (d) {
@@ -246,10 +229,8 @@
                             d3.select(this).select("input").property('checked', false);
                             return false;
                         }
-                    })
+                    });
                 
-                console.log(selected_causes);
-
                 d3.select("#causes-dropdown-list").selectAll("li")
                     .classed("active", function (d) {
 
@@ -261,16 +242,28 @@
                             d3.select(this).select("input").property('checked', false);
                             return false;
                         }
-                    })
+                    });
             }
 
-            function on_update() {
+            function on_update(update_coming_from) {
                 bring_selected_on_top();
-                plotMap(data["map_HDI"]);
-                plotScatterPlot(data["pca_plot"], data["map_HDI"]);
-                plotBarPlot(data["bar_plot"]);
-                parallel_plot();
+
+                if (update_coming_from == "dropdown") {
+                    // 4 graph calls
+                    plotMap(data);
+                    plotScatterPlot(data);
+                    plotBarPlot(data);
+                    parallel_plot(data);
+                }
                 
+                else if (update_coming_from == "scatter") {
+                    console.log("scatter");
+                    plotMap(data);
+                    plotBarPlot(data);
+                    parallel_plot(data);
+                    plotScatterPlot(data);
+                }
+
                 // toggle year on select
                 d3.select("#years-dropdown-list").selectAll("a")
                     .classed("active", function (d) {
@@ -296,7 +289,7 @@
                             colors_iterator++;
                         }
                 }
-                        
+
                 });
 
                 selected_causes = new Set();
@@ -306,11 +299,11 @@
                 });
 
                 // console.log(selected_countries, selected_causes);
-                get_year_data(year);
+                get_year_data(year, "dropdown");
 
             });
 
-            function get_year_data(f_year) {
+            function get_year_data(f_year, update_coming_from) {
                 // selected_years.add(parseInt(this.text));
                 year = f_year;
 
@@ -324,7 +317,7 @@
                     url: url_string,
                     success: function(response) {
                         data = JSON.parse(response);
-                        on_update();
+                        on_update(update_coming_from);
                     }
                 })
             }

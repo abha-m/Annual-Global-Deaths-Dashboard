@@ -76,6 +76,7 @@ def filterByParams():
     # filtered_by_params = filtered_by_params[cols]
     returned_data["bar_plot"] = filtered_by_params.to_dict(orient='records')
     
+    returned_data["parallel"] = df.to_dict("records")
 
     return json.dumps(returned_data)
     

@@ -10,7 +10,7 @@ function removeA(arr) {
     return arr;
 }
 
-function plotBarPlot(data) {
+function plotBarPlot(data_barplot) {
     // console.log(data);
     // set the dimensions and margins of the graph
 
@@ -18,6 +18,8 @@ function plotBarPlot(data) {
     // points.sort(function(a, b){return b - a});
 
     // console.log(selected_causes);
+
+    var data = data_barplot["bar_plot"];
 
     function get_list(data_obj) {
         var sortable = [];
@@ -34,8 +36,8 @@ function plotBarPlot(data) {
         return [sortable, to_keep];
     }
 
-    console.log("AAA");
-    console.log(data.length);
+    // console.log("AAA");
+    // console.log(data);
 
     for (i = 0; i < data.length; i++) {
         temp = get_list(data[i]);
@@ -94,7 +96,7 @@ function plotBarPlot(data) {
         var subgroupName = d3.select(this.parentNode).datum().key;
         var subgroupValue = d.data[subgroupName];
         tooltip
-            .html("Cause: " + subgroupName + "<br>" + "Percentage: " + subgroupValue)
+            .html("Cause: " + subgroupName + "<br>" + "Percentage: " + parseFloat(subgroupValue).toPrecision(3))
             .style("opacity", 1)
     }
     var mousemove = function(d) {
