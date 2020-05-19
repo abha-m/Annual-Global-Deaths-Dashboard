@@ -1,5 +1,11 @@
 /* DROPDOWN */
 
+body {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+}
+
 .checkbox-menu, .dropdown-menu {         
     max-height: 200px;
     overflow-y: auto;
@@ -55,7 +61,7 @@ svg {
 
 .foreground path {
     fill: none;
-    stroke: steelblue;
+    /* stroke: steelblue; */
 }
 
 .brush .extent {

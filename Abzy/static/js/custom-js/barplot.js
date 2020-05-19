@@ -58,9 +58,19 @@ function plotBarPlot(data_barplot) {
         data[i] = to_keep;
     }
 
-    var margin = {top: 10, right: 30, bottom: 20, left: 50},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    var height = $("#barplot").height();
+    var width = $("#barplot").width();
+
+    // console.log(height, width);
+
+    var margin = {top: 10, right: 0, bottom: 0, left: 50};
+    // width = 460 - margin.left - margin.right,
+    // height = 400 - margin.top - margin.bottom;
+
+    width = width - margin.left - margin.right,
+    height = height - margin.top - margin.bottom;
+
+    console.log(height, width);
 
     d3.select("#barplot").selectAll("svg").remove();
 
@@ -71,7 +81,7 @@ function plotBarPlot(data_barplot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.8, 0.70)");
 
     // List of subgroups = header of the csv files = soil condition here
     var subgroups = removeA(Object.keys(data[0]), "Country")
@@ -89,14 +99,14 @@ function plotBarPlot(data_barplot) {
         .style("border", "solid")
         .style("border-width", "1px")
         .style("border-radius", "5px")
-        .style("padding", "10px")
+        .style("padding", "5px")
 
     // Three function that change the tooltip when user hover / move / leave a cell
     var mouseover = function(d) {
         var subgroupName = d3.select(this.parentNode).datum().key;
         var subgroupValue = d.data[subgroupName];
         tooltip
-            .html("Cause: " + subgroupName + "<br>" + "Percentage: " + parseFloat(subgroupValue).toPrecision(3))
+            .html("Cause: " + subgroupName + "<br>" + "Percentage: " + subgroupValue)
             .style("opacity", 1)
     }
     var mousemove = function(d) {
