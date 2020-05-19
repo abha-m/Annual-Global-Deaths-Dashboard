@@ -1,4 +1,6 @@
-function parallel_plot() {
+function parallel_plot(data_parallel) {
+
+    var data2 = data_parallel["parallel"];
 
     // var margin = {top: 50, right: 50, bottom: 50, left: 50};
     // var height = $("#r1c1").height() - margin.left - margin.right;
@@ -76,12 +78,12 @@ function parallel_plot() {
         .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.csv("/static/data/merged_data.csv", function(error, data2) {
+    // d3.csv("/static/data/merged_data.csv", function(error, data2) {
 
-        if (error) {
-            console.log(error);
-            return;
-        }
+        // if (error) {
+        //     console.log(error);
+        //     return;
+        // }
 
         var parallel_countries = Array.from(unique_countries);
         var total_len = 30;
@@ -198,7 +200,7 @@ function parallel_plot() {
             .selectAll("rect")
                 .attr("x", -8)
                 .attr("width", 16);
-    });
+    // });
 
     function position(d) {
         var v = dragging[d.name];
@@ -234,7 +236,7 @@ function parallel_plot() {
         // render.invalidate();
 
         var actives = [];
-        svg.selectAll(".axis .brush")
+        svg_parallel.selectAll(".axis .brush")
         .each(function(d) {
             actives.push({
             dimension: d,

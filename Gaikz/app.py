@@ -11,6 +11,9 @@ df = pd.read_csv("static/data/merged_data.csv")
 df = df.dropna()
 df = df.drop("Unnamed: 0", axis=1)
 
+df_HDI = pd.read_csv("static/data/human-development-index.csv")
+df_HDI = df_HDI.fillna(0)
+
 app = Flask(__name__)
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -38,6 +41,11 @@ def filterByParams():
     year_arg = request.args.get('years')
     all_causes = request.args.getlist('causes')
     all_countries = request.args.getlist('countries')
+
+    '''  Map  '''
+    filtered_by_params_HDI = df_HDI[df_HDI["Year"] == int(year_arg)]
+    filtered_by_params_HDI['s_no'] = range(1, len(filtered_by_params_HDI) + 1)
+    returned_data["map_HDI"] = filtered_by_params_HDI.to_dict(orient='records')
 
     '''  PCA  '''
     cols_to_select = all_causes
@@ -68,6 +76,8 @@ def filterByParams():
     # filtered_by_params = filtered_by_params[cols]
     returned_data["bar_plot"] = filtered_by_params.to_dict(orient='records')
     
+    returned_data["parallel"] = df.to_dict("records")
+
     return json.dumps(returned_data)
     
 def computePCA(fil_df):
