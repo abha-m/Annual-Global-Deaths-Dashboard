@@ -17,7 +17,7 @@ function plotScatterPlot(dataset_plot) {
     var height = $("#scatterplot").height();
     var width = $("#scatterplot").width();
 
-    console.log(height, width);
+    // console.log(height, width);
 
     var margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 460 - margin.left - margin.right,
@@ -31,7 +31,7 @@ function plotScatterPlot(dataset_plot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.9, 0.8)");
 
     // Add X axis
     var x = d3.scaleLinear()

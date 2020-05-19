@@ -22,11 +22,7 @@ function parallel_plot(data_parallel) {
     // var country_list = Array.from(selected_countries).sort();
     var disease_list = Array.from(selected_causes);
     disease_list.unshift("Country");
-
-    // var country_set = selected_countries;
-
-    // var year = "2008";
-
+    
     // console.log(country_list);
     // console.log(country_set);
     // console.log(disease_list);
@@ -89,17 +85,13 @@ function parallel_plot(data_parallel) {
         var total_len = 30;
         var remaining_len = total_len - selected_countries.size;
         var remaining_countries = new Set(parallel_countries.filter( ( el ) => !selected_countries.has( el ) ).slice(0, remaining_len));
-        // console.log(remaining_countries);
 
         parallel_countries = new Set([...selected_countries, ...remaining_countries])
-        // console.log(parallel_countries);
 
         // remaining_countries.has(element["Country"]) & 
         data2 = data2.filter(element => parallel_countries.has(element["Country"]) &  element["Year"] == year)
                 .map(element => Object.assign({}, ...disease_list.map(key => ({[key]: element[key]}))))
-        
-        // console.log(data2);
-        // console.log(dimensions);
+       
         //Create the dimensions depending on attribute "type" (number|string)
         // The x-scale calculates the position by attribute dimensions[x].name
         dimensions.forEach(function(dimension) {
@@ -112,8 +104,6 @@ function parallel_plot(data_parallel) {
             //                     .range([height, 0])
             
         });
-
-        // console.log(y);
 
         // Add grey background lines for context.
         background = svg_parallel.append("g")
@@ -237,7 +227,7 @@ function parallel_plot(data_parallel) {
     }
 
     function brushend() {
-        get_year_data(year, "scatter");
+        get_year_data(year, "parallel");
         update_actives();
     }
     
@@ -275,13 +265,21 @@ function parallel_plot(data_parallel) {
                     }
                 }
                 return check ? null : "none";
+            })
+            .style("stroke", function (d) {
+                // console.log(country_color_dict);
+                if (selected_countries.has(d["Country"])) {
+                    // console.log(country_color_dict[d["Country"]]);
+                    return country_color_dict[d["Country"]];
+                }
             });
         }
         else {
-            foreground.style('display', null);
+            foreground.style('display', function(d) { return null;});
             if (!selected_countries.size) {
                 selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
             }
+            console.log(selected_countries);
         }
       }
 }

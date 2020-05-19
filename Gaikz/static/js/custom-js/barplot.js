@@ -61,9 +61,9 @@ function plotBarPlot(data_barplot) {
     var height = $("#barplot").height();
     var width = $("#barplot").width();
 
-    console.log(height, width);
+    // console.log(height, width);
 
-    var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    var margin = {top: 10, right: 0, bottom: 0, left: 50};
     // width = 460 - margin.left - margin.right,
     // height = 400 - margin.top - margin.bottom;
 
@@ -81,7 +81,7 @@ function plotBarPlot(data_barplot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.8, 0.70)");
 
     // List of subgroups = header of the csv files = soil condition here
     var subgroups = removeA(Object.keys(data[0]), "Country")
