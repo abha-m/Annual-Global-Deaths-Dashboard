@@ -40,7 +40,7 @@ function hdi_barplot(data2) {
     // });
 
     // Scale the range of the data in the domains
-    x.domain([0, d3.max(data, function(d){ return d.HDI; })])
+    x.domain([0, d3.max(data2["map_HDI"], function(d){ return d.HDI; })])
     y.domain(data.map(function(d) { return d.Entity; }));
     //y.domain([0, d3.max(data, function(d) { return d.sales; })]);
 
