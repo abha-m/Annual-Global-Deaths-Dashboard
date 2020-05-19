@@ -12,7 +12,7 @@ function hdi_barplot(data2) {
     
     // console.log(height, width);
 
-    var margin = {top: 20, right: 10, bottom: 30, left: 10},
+    var margin = {top: 30, right: 10, bottom: 30, left: 10},
         width = width - margin.left - margin.right,
         height = height - margin.top - margin.bottom;
 
@@ -49,6 +49,10 @@ function hdi_barplot(data2) {
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
+        .style("fill", function (d) { 
+            if(selected_countries.has(d.Entity)) { 
+            return country_color_dict[d.Entity];}
+        })
         //.attr("x", function(d) { return x(d.sales); })
         .attr("width", function(d) {return x(d.HDI); } )
         .attr("y", function(d) { return y(d.Entity); })
@@ -61,7 +65,7 @@ function hdi_barplot(data2) {
 
     // add the x Axis
     svg.append("g")
-        .attr("transform", "translate(0," + "" + "-10)")
+        .attr("transform", "translate(0," + "" + "-20)")
         .call(d3.axisBottom(x))
         // .style('stroke', '#fff');
         // .attr("transform", ("translate(0," + String(height) + ")"));

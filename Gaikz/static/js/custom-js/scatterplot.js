@@ -75,7 +75,7 @@ function plotScatterPlot(dataset_plot) {
                                     // return selected_color(d.Sum);
                                     // return country_colorScale(d.Country);
                                     return country_color_dict[d.Country];
-                                } 
+                                    } 
                                 return color(d.HDI); } )
     .style("opacity", function (d) {
         if(selected_countries.has(d.Country)) {
@@ -117,6 +117,19 @@ function plotScatterPlot(dataset_plot) {
         }
         // plotBarPlot(data["bar_plot"]);
         // parallel_plot();
+
+        myCircle.style("fill", function (d) { if(selected_countries.has(d.Country)) { 
+                                                return country_color_dict[d.Country];
+                                            } 
+                                        return color(d.HDI); } )
+        .style("opacity", function (d) {
+            if(selected_countries.has(d.Country)) {
+                return 1.2;
+            }
+            else {
+                return 0.4;
+            }
+        });
 
         // myCircle.classed("selected", function(d){ selected_countries.add(isBrushed(extent, x(d.PC1), y(d.PC2), d.Country )); } )
     }
