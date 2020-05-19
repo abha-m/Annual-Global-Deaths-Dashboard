@@ -33,7 +33,7 @@ function hdi_barplot(data2) {
     .append("g")
         .attr("transform", 
             "translate(" + margin.left + "," + margin.top + ")");
-
+    
     // format the data
     // data.forEach(function(d) {
     //     d.sales = +d.sales;
