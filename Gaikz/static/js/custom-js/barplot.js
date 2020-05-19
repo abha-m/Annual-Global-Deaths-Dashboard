@@ -58,9 +58,19 @@ function plotBarPlot(data_barplot) {
         data[i] = to_keep;
     }
 
-    var margin = {top: 10, right: 30, bottom: 20, left: 50},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    var height = $("#barplot").height();
+    var width = $("#barplot").width();
+
+    console.log(height, width);
+
+    var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    // width = 460 - margin.left - margin.right,
+    // height = 400 - margin.top - margin.bottom;
+
+    width = width - margin.left - margin.right,
+    height = height - margin.top - margin.bottom;
+
+    console.log(height, width);
 
     d3.select("#barplot").selectAll("svg").remove();
 

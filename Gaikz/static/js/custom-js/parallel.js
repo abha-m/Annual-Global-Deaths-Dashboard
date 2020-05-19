@@ -12,7 +12,7 @@ function parallel_plot(data_parallel) {
     var height = $("#parallel_coordinates").height();
     var width = $("#parallel_coordinates").width();
 
-    var margin = {top: 50, right: 0, bottom: 0, left: 150};
+    var margin = {top: 50, right: 0, bottom: 30, left: 120};
                 // width = 960 - margin.left - margin.right,
                 // height = 500 - margin.top - margin.bottom;
 
@@ -107,9 +107,9 @@ function parallel_plot(data_parallel) {
                 ? d3.extent(data2, function(d) { return +d[dimension.name]; })
                 : data2.map(function(d) { return d[dimension.name]; }).sort());
 
-            y[dimension.name] = d3.scaleLinear()
-                                .domain(d3.extent(data2, function(p) { return +p[dimension.name]; }))
-                                .range([height, 0])
+            // y[dimension.name] = d3.scaleLinear()
+            //                     .domain(d3.extent(data2, function(p) { return +p[dimension.name]; }))
+            //                     .range([height, 0])
             
         });
 
@@ -131,9 +131,9 @@ function parallel_plot(data_parallel) {
             .enter().append("path")
                 .attr("d", path)
                 .style("stroke", function (d) {
-                    console.log(country_color_dict);
+                    // console.log(country_color_dict);
                     if (selected_countries.has(d["Country"])) {
-                        console.log(country_color_dict[d["Country"]]);
+                        // console.log(country_color_dict[d["Country"]]);
                         return country_color_dict[d["Country"]];
                     }
                 });
@@ -194,15 +194,15 @@ function parallel_plot(data_parallel) {
                     .text(function(d) { return d.name; });
 
         // Add and store a brush for each axis.
-        g.append("g")
+        // g
+        d3.select(".dimension").append("g")
                 .attr("class", "brush")
             .each(function(d) {
-                // .y(d.scale)
                 d3.select(this).call(d.scale.brush = d3.brushY()
                             .extent([[-10,0], [10,height]])
                             .on("start", brushstart)
                             .on("brush", brush)
-                            .on("end", brush))
+                            .on("end", brushend))
             })
             .selectAll("rect")
                 .attr("x", -8)
@@ -236,60 +236,52 @@ function parallel_plot(data_parallel) {
         d3.event.sourceEvent.stopPropagation();
     }
 
-    // Handles a brush event, toggling the display of foreground lines.
+    function brushend() {
+        get_year_data(year, "scatter");
+        update_actives();
+    }
+    
     function brush() {
-        
-        // console.log(dimensions[0].scale.brush);
-        // render.invalidate();
+        selected_countries = new Set();
 
         var actives = [];
-        svg_parallel.selectAll(".axis .brush")
-        .each(function(d) {
-            actives.push({
-            dimension: d,
-            extent: d3.brushSelection(this)
-            });
-        });
+        //filter brushed extents
+        svg_parallel.selectAll(".brush")
+            .filter(function(d) {
+                return d3.brushSelection(this);
+            })
+            .each(function(d) {
+                actives.push({
+                    dimension: d,
+                    extent: d3.brushSelection(this)
+                });
+            });        
+        actives = actives[0];
         
         // console.log(actives);
-
-        var extents = dimensions.map(function(p) { return p.scale.brush.extent(); });
-
-        foreground.style("display", function(d) {
-            return actives.every(function(p, i) {
-                if(p.type==="number"){
-                    return extents[i][0] <= parseFloat(d[p.name]) && parseFloat(d[p.name]) <= extents[i][1];
-                }else{
-                    return extents[i][0] <= p.scale(d[p.name]) && p.scale(d[p.name]) <= extents[i][1];
+        if (actives) {        
+            // set un-brushed foreground line disappear
+            foreground.style('display', function(d) {
+                // console.log(d);
+                const dim = actives.dimension;
+                const country = d[dim.name];
+                // console.log(dim.scale(d[dim.name]));
+                check = actives.extent[0] <= dim.scale(country) && dim.scale(country) <= actives.extent[1];
+                if (check) {
+                    selected_countries.add(country);
+                    if(!(country in country_color_dict)) {
+                        country_color_dict[country] = colors[colors_iterator % colors.length];
+                        colors_iterator++;
+                    }
                 }
-            }) ? null : "none";
-        });
-    }
+                return check ? null : "none";
+            });
+        }
+        else {
+            foreground.style('display', null);
+            if (!selected_countries.size) {
+                selected_countries = new Set(["Albania", "Afghanistan", "Argentina"]);
+            }
+        }
+      }
 }
-// function brush() {  
-//     var actives = [];
-//     svg.selectAll(".brush")
-//     .filter(function(d) {
-//             y[d].brushSelectionValue = d3.brushSelection(this);
-//             return d3.brushSelection(this);
-//     })
-//     .each(function(d) {
-//         // Get extents of brush along each active selection axis (the Y axes)
-//             actives.push({
-//                 dimension: d,
-//                 extent: d3.brushSelection(this).map(y[d].invert)
-//             });
-//     });
-    
-//     var selected = [];
-//     // Update foreground to only display selected values
-//     foreground.style("display", function(d) {
-//         let isActive = actives.every(function(active) {
-//             let result = active.extent[1] <= d[active.dimension] && d[active.dimension] <= active.extent[0];
-//             return result;
-//         });
-//         // Only render rows that are active across all selectors
-//         if(isActive) selected.push(d);
-//         return (isActive) ? null : "none";
-//     });
-// }  
