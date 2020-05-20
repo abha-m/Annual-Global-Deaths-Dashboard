@@ -12,6 +12,7 @@ function hdi_barplot(data2) {
     
     // console.log(height, width);
 
+<<<<<<< HEAD
     // var margin = {top: 30, right: 10, bottom: 30, left: 10},
     //     width = width - margin.left - margin.right,
     //     height = height - margin.top - margin.bottom;
@@ -19,6 +20,11 @@ function hdi_barplot(data2) {
     var margin = {top: 40, right: 10, bottom: 30, left: 10},
     width = width - margin.left - margin.right,
     height = height - margin.top - margin.bottom;
+=======
+    var margin = {top: 40, right: 10, bottom: 30, left: 10},
+        width = width - margin.left - margin.right,
+        height = height - margin.top - margin.bottom;
+>>>>>>> 343131704d2fd6d75dd9620c917fbbea73160c7c
 
     // set the ranges
     var y = d3.scaleBand()
@@ -37,7 +43,15 @@ function hdi_barplot(data2) {
     .append("g")
         .attr("transform", 
             "translate(" + margin.left + "," + margin.top + ")");
-
+    
+    svg.append("text")
+        // .attr("transform", "rotate(-90)")
+        .attr("y", 5 - margin.top)
+        .attr("x",0 + 8*margin.left )
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Country HDI");
+    
     // format the data
     // data.forEach(function(d) {
     //     d.sales = +d.sales;

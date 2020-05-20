@@ -2,19 +2,23 @@ function hdi_barplot(data2) {
     
 
     var data = data2["map_HDI"].filter( (el) => (selected_countries.has(el.Entity)));
-    console.log(data, selected_countries);
+    // console.log(data, selected_countries);
 
     // var height = $("#hdi_barplot").height();
     // var width = $("#hdi_barplot").width();
 
-    var height = 680;
-    var width = 150;
+    var height = 660;
+    var width = 170;
     
-    console.log(height, width);
+    // console.log(height, width);
 
-    var margin = {top: 22, right: 10, bottom: 30, left: 10},
-        width = width - margin.left - margin.right,
-        height = height - margin.top - margin.bottom;
+    // var margin = {top: 30, right: 10, bottom: 30, left: 10},
+    //     width = width - margin.left - margin.right,
+    //     height = height - margin.top - margin.bottom;
+    
+    var margin = {top: 40, right: 10, bottom: 30, left: 10},
+    width = width - margin.left - margin.right,
+    height = height - margin.top - margin.bottom;
 
     // set the ranges
     var y = d3.scaleBand()
@@ -39,8 +43,16 @@ function hdi_barplot(data2) {
     //     d.sales = +d.sales;
     // });
 
+    svg.append("text")
+        // .attr("transform", "rotate(-90)")
+        .attr("y", 5 - margin.top)
+        .attr("x",0 + 8*margin.left )
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Country HDI");
+
     // Scale the range of the data in the domains
-    x.domain([0, d3.max(data, function(d){ return d.HDI; })])
+    x.domain([0, d3.max(data2["map_HDI"], function(d){ return d.HDI; })])
     y.domain(data.map(function(d) { return d.Entity; }));
     //y.domain([0, d3.max(data, function(d) { return d.sales; })]);
 
@@ -49,6 +61,10 @@ function hdi_barplot(data2) {
         .data(data)
         .enter().append("rect")
         .attr("class", "bar")
+        .style("fill", function (d) { 
+            if(selected_countries.has(d.Entity)) { 
+            return country_color_dict[d.Entity];}
+        })
         //.attr("x", function(d) { return x(d.sales); })
         .attr("width", function(d) {return x(d.HDI); } )
         .attr("y", function(d) { return y(d.Entity); })
@@ -56,7 +72,8 @@ function hdi_barplot(data2) {
         .append("text")
         .text(function (d) {
             return d.Entity;
-        });
+        })
+        ;
 
     // add the x Axis
     svg.append("g")

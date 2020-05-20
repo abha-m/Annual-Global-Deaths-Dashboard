@@ -140,7 +140,6 @@ function plotMap(data) {
         // set the color of each country
         .attr("fill", function (d) {
             if(selected_countries.has(d["properties"]["name"])) {
-                // console.log(country_color_dict[d["properties"]["name"]]);
                 d.total = data.get(d.id) || 0;
                 return country_color_dict[d["properties"]["name"]];
             }

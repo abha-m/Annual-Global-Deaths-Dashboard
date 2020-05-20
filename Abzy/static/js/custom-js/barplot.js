@@ -83,7 +83,15 @@ function plotBarPlot(data_barplot) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform",
-        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.8, 0.70)");
+        "translate(" + margin.left + "," + margin.top + ")" + "scale(0.8, 0.75)")
+
+    svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Cause Percentage");
 
     // List of subgroups = header of the csv files = soil condition here
     var subgroups = removeA(Object.keys(data[0]), "Country")
@@ -130,9 +138,7 @@ function plotBarPlot(data_barplot) {
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x).tickSizeOuter(0))
     .selectAll("text")
-    .attr("transform",
-    "translate(-10, 20) "+
-    "rotate(-30)");
+        .attr("transform", "rotate(-20)");
 
     // Add Y axis
     var y = d3.scaleLinear()
@@ -199,7 +205,7 @@ function plotBarPlot(data_barplot) {
         .attr("y", function(d) { return y(d[1]); })
         .attr("height", function(d) { return y(d[0]) - y(d[1]); })
         .attr("width",x.bandwidth())
-        .attr("stroke", "#5F89AD")
+        .attr("stroke", "black")
         .attr("stroke-width", "0.5")
         .on("mouseover", mouseover)
         .on("mousemove", mousemove)
